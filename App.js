@@ -1,16 +1,34 @@
+// https://www.youtube.com/watch?v=1FiIYaRr148
 import React, { useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
+import Header from './components/header';
+import TodoItem from './components/todoitem';
 
 export default function App() {
-  const [name, setName] = useState('Shaun');
+  const [todos, setTodos] = useState([
+    { text: 'buy coffee', key: '1' },
+    { text: 'create an app', key: '2' },
+    { text: 'play on the switch', key: '3' },
+  ]);
+
+  const pressHandler = (key) => {
+    setTodos((prevTodos) => {
+      return prevTodos.filter((todo) => todo.key != key);
+    });
+  };
+
   return (
     <View style={styles.container}>
-      <View>
-        <Text>My name is {name}</Text>
-        <Text></Text>
-        <View style={styles.buttonContainer}>
-          <Button title="update state" />
+      <Header />
+      <View style={styles.content}>
+        {/* todo form  */}
+        <View style={styles.list}>
+          <FlatList
+            data={todos}
+            renderItem={({ item }) => (
+              <TodoItem item={item} pressHandler={pressHandler} />
+            )}
+          />
         </View>
       </View>
     </View>
@@ -21,18 +39,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
-  header: {
-    backgroundColor: 'pink',
-    padding: 20,
+  content: {
+    padding: 40,
   },
-  boldText: {
-    fontWeight: 'bold',
-  },
-  body: {
-    backgroundColor: 'yellow',
-    padding: 20,
+  list: {
+    marginTop: 20,
   },
 });
